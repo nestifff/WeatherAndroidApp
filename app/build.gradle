@@ -62,4 +62,8 @@ dependencies {
 */
     // Recyclerview
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+
+    implementation "com.google.android.material:material:1.4.0"
+
+
 }
