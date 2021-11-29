@@ -1,10 +1,10 @@
-package com.nestifff.weatherapp.forecastFragment
+package com.nestifff.weatherapp.view.forecastFragment
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nestifff.weatherapp.R
-import com.nestifff.weatherapp.models.forecast.Forecast
+import com.nestifff.weatherapp.model.dataClasses.Forecast
 
 class ForecastsViewHolder(
     private val itemView: View

@@ -1,11 +1,11 @@
-package com.nestifff.weatherapp.forecastFragment
+package com.nestifff.weatherapp.view.forecastFragment
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.nestifff.weatherapp.R
-import com.nestifff.weatherapp.models.forecast.Forecast
+import com.nestifff.weatherapp.model.dataClasses.Forecast
 
 class ForecastsAdapter: RecyclerView.Adapter<ForecastsViewHolder>() {
 

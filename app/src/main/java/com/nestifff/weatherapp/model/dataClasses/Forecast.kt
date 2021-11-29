@@ -1,15 +1,13 @@
-package com.nestifff.weatherapp.models.forecast
+package com.nestifff.weatherapp.model.dataClasses
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.nestifff.weatherapp.models.weather.TemperatureInfo
-import com.nestifff.weatherapp.models.weather.Weather
 
 class Forecast {
 
     @Expose
     @SerializedName("weather")
-    lateinit var weather: List<Weather>
+    lateinit var weather: List<WeatherInfo>
 
     @Expose
     @SerializedName("main")

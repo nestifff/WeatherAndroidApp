@@ -1,7 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+    <!--    TODO: delete unnecessary -->
+    <!--    TODO: read about API < 23 more carefully-->
     <style name="Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight">
-    <!--<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">-->
+        <!--<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">-->
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/light_blue</item>
         <!-- For API from [21, 23), it is statusBar background color, colorOnPrimary - textColor
@@ -17,7 +19,7 @@
         <!-- For API >= 23 - white background and black textColor -->
         <item name="android:statusBarColor" tools:targetApi="m">@color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
+        <!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
         <!-- Customize your theme here. -->
     </style>
 </resources>
