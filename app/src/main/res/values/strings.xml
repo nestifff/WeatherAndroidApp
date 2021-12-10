@@ -4,4 +4,11 @@
     <string name="show_forecast">Show forecast</string>
     <string name="today">Today</string>
     <string name="forecast">Forecast</string>
+    <string name="retry">Retry</string>
+    <string name="sorry_an_error_occurred_n_while_loading_data">Sorry, an error occurred \n while loading data</string>
+    <string name="some_network_errors_n_can_t_load_data">Some network errors, \n can\'t load data</string>
+    <string name="for_this_application_to_work_it_is_needed_to_know_the_location_of_the_device_give_location_permission_please">For this application to work, it is needed to know the location of the device. Give location permission, please</string>
+    <string name="ok">Ok</string>
+    <string name="no">No</string>
+    <string name="it_is_impossible_to_retrieve_location_message">It is impossible to retrieve location of device. Turn on mobile data, Wi-Fi or (and) GPS, and try again, please</string>
 </resources>

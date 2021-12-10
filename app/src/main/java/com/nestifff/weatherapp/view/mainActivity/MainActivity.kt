@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -39,6 +38,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomMenu: BottomNavigationView
 
     private var location: Location? = null
+
+    // TODO: create progressBar while retrieve location
+    // (if getCurrent and it is not possible, it will be for ~10s)
+    // or just set timeout 0.5s
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setThemeAndStatusBarColor()
@@ -84,14 +87,16 @@ class MainActivity : AppCompatActivity() {
         return this
     }
 
+    fun requestLocationPermission() {
+        locationPresenter?.requestPermissionLocation(false)
+    }
+
+    fun retrieveLocation() {
+        locationPresenter?.retrieveLocation()
+    }
+
     fun showRequestPermissionLocationRationale() {
-        Toast.makeText(
-            this,
-            "You should provide your location info to show weather and forecast",
-            Toast.LENGTH_LONG
-        ).show()
-        // TODO: shackbar show rationale: yes -> locationPresenter.justRequestPermission()
-        // no -> presenter.permissionDenied()
+        showLocationPermissionSnackbar(bottomMenu, this)
     }
 
     private fun setThemeAndStatusBarColor() {
@@ -136,19 +141,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showLocationPermissionDenied() {
-        Toast.makeText(
-            this, "Permission denied, can't show weather",
-            Toast.LENGTH_SHORT
-        ).show()
-        //TODO view to ask location permission again
+        showLocationPermissionSnackbar(bottomMenu, this)
     }
 
     fun impossibleRetrieveLocation() {
-        Toast.makeText(
-            this, "Impossible retrieve location, can't show weather",
-            Toast.LENGTH_SHORT
-        ).show()
-        //TODO view to try retrieve location again
+        showImpossibleRetrieveLocationSnackbar(bottomMenu, this)
     }
 
     private fun changeBottomMenuState(isEnabled: Boolean) {

@@ -26,6 +26,8 @@ class ForecastPresenter(
 
     private fun loadForecast() {
 
+        view?.showProgressBar()
+
         forecastModel.loadForecast(location)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -38,12 +40,14 @@ class ForecastPresenter(
 
                 override fun onError(e: Throwable) {
                     disposable.dispose()
+                    view?.hideProgressBar()
                     view?.showLoadingError()
                     Log.i(TAG, "showForecast onError: $e, thread: ${Thread.currentThread()}")
                 }
 
                 override fun onSuccess(t: ForecastJsonObj) {
                     disposable.dispose()
+                    view?.hideProgressBar()
                     forecasts = t.forecasts
                     cityName = t.city.name
                     Log.i(TAG, "showForecast onNext: $t, thread: ${Thread.currentThread()}")
@@ -54,7 +58,15 @@ class ForecastPresenter(
             })
     }
 
+    fun retryLoading() {
+        loadData()
+    }
+
     fun viewOnStarted() {
+        loadData()
+    }
+
+    private fun loadData() {
         if (forecasts == null) {
             loadForecast()
         } else {

@@ -4,8 +4,11 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.nestifff.weatherapp.TAG
 import com.nestifff.weatherapp.model.location.LocationModel
 import com.nestifff.weatherapp.view.mainActivity.MainActivity
 import io.reactivex.Observer
@@ -21,11 +24,11 @@ class LocationPresenter(
     private lateinit var disposable: Disposable
     private var location: Location? = null
 
-    private fun requestPermissionLocation() {
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
-        val activity = view?.getActivity() ?: return
+    private fun createRequestPermissionLauncher(activity: MainActivity) {
 
-        val requestPermissionLauncher =
+        requestPermissionLauncher =
             activity.registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
@@ -35,6 +38,11 @@ class LocationPresenter(
                     permissionDenied()
                 }
             }
+    }
+
+    fun requestPermissionLocation(showRationale: Boolean) {
+
+        val activity = view?.getActivity() ?: return
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             permissionGranted()
@@ -46,11 +54,9 @@ class LocationPresenter(
                     == PackageManager.PERMISSION_GRANTED ->
                 permissionGranted()
 
-            activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
-
+            showRationale && activity.shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 view?.showRequestPermissionLocationRationale()
-                //TODO: delete (shackbar show rationale)
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
             }
 
             else -> requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -61,7 +67,7 @@ class LocationPresenter(
         retrieveLocation()
     }
 
-    private fun permissionDenied() {
+    fun permissionDenied() {
         view?.showLocationPermissionDenied()
     }
 
@@ -74,7 +80,7 @@ class LocationPresenter(
         view?.impossibleRetrieveLocation()
     }
 
-    private fun retrieveLocation() {
+    fun retrieveLocation() {
 
         model.getLocation()
             .subscribeOn(Schedulers.io())
@@ -88,24 +94,27 @@ class LocationPresenter(
 
                 override fun onNext(t: Location) {
                     locationRetrieved(t)
+                    Log.i(TAG, "retrieveLocation presenter onNext: $t")
                 }
 
                 override fun onError(e: Throwable) {
                     impossibleRetrieveLocation()
+                    Log.i(TAG, "retrieveLocation presenter onError: ${e.message}")
                     disposable.dispose()
                 }
 
                 override fun onComplete() {
+                    Log.i(TAG, "retrieveLocation presenter onComplete")
                     disposable.dispose()
                 }
-
             })
     }
 
     fun attachView(view: MainActivity) {
         this.view = view
         if (location == null) {
-            requestPermissionLocation()
+            createRequestPermissionLauncher(view)
+            requestPermissionLocation(true)
         }
     }
 

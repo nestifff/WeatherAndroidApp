@@ -24,6 +24,8 @@ class CurrentWeatherPresenter(
 
     private fun loadCurrentWeather() {
 
+        view?.showProgressBar()
+
         currentWeatherModel.getCurrentWeather(location)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -39,6 +41,7 @@ class CurrentWeatherPresenter(
 
                 override fun onError(e: Throwable) {
                     disposable.dispose()
+                    view?.hideProgressBar()
                     view?.showLoadingError()
                     Log.i(TAG, "showCurrentWeather onError: $e, thread: ${Thread.currentThread()}")
                 }
@@ -46,6 +49,7 @@ class CurrentWeatherPresenter(
                 override fun onSuccess(t: CurrentWeather) {
                     currentWeather = t
                     disposable.dispose()
+                    view?.hideProgressBar()
                     view?.showCurrentWeather(t)
                     Log.i(TAG, "showCurrentWeather onNext: $t, thread: ${Thread.currentThread()}")
                 }
@@ -53,7 +57,15 @@ class CurrentWeatherPresenter(
             })
     }
 
+    fun retryLoading() {
+        loadData()
+    }
+
     fun viewOnStarted() {
+        loadData()
+    }
+
+    private fun loadData() {
         if (currentWeather == null) {
             loadCurrentWeather()
         } else {
